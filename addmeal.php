@@ -1,3 +1,9 @@
+<?php
+// Include the file with functions (including getCuisines())
+include('cuisineModel.php');
+include('db.config.php');
+include('mealtypeModel.php');
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -24,8 +30,42 @@
             <label for="meal_type_id">Meal Type:</label>
             <select name="meal_type_id" required>
               <option value="">Select Meal Type</option>
-            </select><br><br>
+              <?php
+                // Call the function with the connection
+                $mealtypes = getMealType($conn);
 
+                foreach ($mealtypes as $mealtype) {
+                  $id = $mealtype['meal_type_id'];
+                  $name = $mealtype['meal-type'];
+                  echo "<option value='$id'>$name";
+                  if (isset($_GET['meal_type_id']) && $_GET['meal_type_id'] == $id) {
+                    echo " selected";
+                  }
+                 
+                  echo ">$name</option>";
+                }
+              ?>
+            </select><br><br>
+            
+            <label for="cuisine_id">Cuisine:</label>
+            <select name="cuisine_id">
+              <option value="">Select Cuisine</option>
+              <?php
+                // Call the function with the connection
+                $cuisines = getCuisines($conn);
+
+                foreach ($cuisines as $cuisine) {
+                  $id = $cuisine['cuisine_id'];
+                  $name = $cuisine['cuisine-name'];
+                  echo "<option value='$id'>$name";
+                  if (isset($_GET['cuisine_id']) && $_GET['cuisine_id'] == $id) {
+                    echo " selected";
+                  }
+                 
+                  echo ">$name</option>";
+                }
+              ?>
+            </select><br><br>
             <h3>Nutritional Information</h3>
             <label for="calories">Calories:</label>
             <input type="number" name="calories"><br><br>
